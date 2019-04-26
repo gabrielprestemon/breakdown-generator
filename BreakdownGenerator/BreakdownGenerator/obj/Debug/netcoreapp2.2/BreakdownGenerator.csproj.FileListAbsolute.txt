@@ -1,0 +1,6 @@
+D:\dev\repos\breakdown-generator\BreakdownGenerator\BreakdownGenerator\bin\Debug\netcoreapp2.2\BreakdownGenerator.deps.json
+D:\dev\repos\breakdown-generator\BreakdownGenerator\BreakdownGenerator\bin\Debug\netcoreapp2.2\BreakdownGenerator.dll
+D:\dev\repos\breakdown-generator\BreakdownGenerator\BreakdownGenerator\obj\Debug\netcoreapp2.2\BreakdownGenerator.csprojAssemblyReference.cache
+D:\dev\repos\breakdown-generator\BreakdownGenerator\BreakdownGenerator\obj\Debug\netcoreapp2.2\BreakdownGenerator.csproj.CoreCompileInputs.cache
+D:\dev\repos\breakdown-generator\BreakdownGenerator\BreakdownGenerator\obj\Debug\netcoreapp2.2\BreakdownGenerator.AssemblyInfoInputs.cache
+D:\dev\repos\breakdown-generator\BreakdownGenerator\BreakdownGenerator\obj\Debug\netcoreapp2.2\BreakdownGenerator.AssemblyInfo.cs
