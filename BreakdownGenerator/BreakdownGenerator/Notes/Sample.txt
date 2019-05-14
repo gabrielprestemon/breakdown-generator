@@ -1,0 +1,85 @@
+﻿This file is a guitar at 120 bpm in 3/4 playing E, gradually decreasing note length from half note to 32nd note.
+Complete byte stream is split arbitrarily every 16 bytes for readability.
+
+4D 54 68 64 00 00 00 06 00 01 00 02 01 E0 4D 54
+72 6B 00 00 00 0B 00 FF 51 03 09 27 C0 00 FF 2F
+00 4D 54 72 6B 00 00 00 54 00 FF 03 03 67 74 72
+00 C0 1E 00 FF 58 04 03 02 18 08 00 FF 59 02 00
+00 00 B0 65 00 00 B0 64 00 00 B0 06 06 8B 20 90
+28 48 87 40 80 28 40 00 90 28 48 83 60 80 28 40
+00 90 28 48 81 70 80 28 40 78 90 28 48 78 80 28
+40 3C 90 28 48 3C 80 28 40 00 FF 2F 00
+
+-------------------------------------------------
+
+Hand-analysis of bytes
+
+
+4D 54 68 64     MThd - header chunk
+00 00 00 06     length = 6 bytes
+00 01           format 1
+00 02           2 tracks
+01 E0           ticks per quarter note divisions, 120 bpm
+
+
+4D 54 72 6B     MTrk - track chunk
+00 00 00 0B     length = 11 bytes
+00              start at 0 ticks
+FF 51 03        set tempo
+    09 27 C0    600,000 us = 600 ms, per q-note = 100 bpm
+00              0 ticks
+FF 2F 00        end at ^
+
+
+4D 54 72 6B     MTrk - track chunk
+
+00 00 00 54     length = 54 bytes
+00              start at 0 ticks
+FF 03           track name
+      03        3 characters long
+    67 74 72    "gtr"
+
+00 C0 1E        something to do with channel select...
+
+00              start at 0 ticks
+FF 58 04        time signature
+         03     3 beats per measure
+         02     quarter-note pulse
+            18  18 midi clocks per metronome click (through math, this is every quarter note)
+            08  8 midi clocks per 32nd note, 24 per quarter note (duple-time?)
+
+00              start at 0 ticks
+FF 59 02        set key signature
+         00     no accidentals
+            00  major key
+
+00
+B0 65 00
+00
+B0 64 00
+00
+B0 06 06 8B
+
+ t  n  e  v
+20 90 28 48
+87
+
+ t  n  e  v
+40 80 28 40
+
+ t  n  e  v
+00 90 28 48 83
+
+ t  n  e  v
+60 80 28 40
+
+
+00 90 28 48 81
+
+70 80 28 40 78
+
+90 28 48 78 80 28 40 3C 90 28 48 3C 80
+
+28 40 00
+
+FF 2F 00        end track
