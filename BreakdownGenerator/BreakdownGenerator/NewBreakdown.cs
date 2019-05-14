@@ -15,7 +15,7 @@ namespace BreakdownGenerator
         public string Path { get; set; }
 
         [Parameter(Mandatory = false)]
-        public bool Read { get; set; } = false;
+        public SwitchParameter Read { get; set; } = false;
 
         protected override void ProcessRecord()
         {
