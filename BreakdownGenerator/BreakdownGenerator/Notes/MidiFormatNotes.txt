@@ -1,0 +1,95 @@
+﻿Good MIDI Spec site:
+http://www.music.mcgill.ca/~ich/classes/mumt306/StandardMIDIfileformat.html
+
+Cool pdf about MIDI spec:
+http://educypedia.karadimov.info/library/The_MIDI_Specification.pdf
+
+-----------------------------------------------------------
+
+File: a series of bytes or chunks.
+Chunk: 4-byte header type and 4-byte header length. ("Alien" chunks will be ignored).
+Chunk Type: MThd = header, MTrk = track.
+
+-----------------------------------------------------------
+
+All MIDI files will start with a header chunk
+<Header Chunk> = <chunk type><length><format><ntrks><division>
+Chunk type (4 bytes) will be MThd (Dec: 77 84 104 100, Hex: 4D 54 68 64)
+Header Length (defined in 4 bytes) will be 6 bytes (three 2-byte words)
+Format:
+    0 = single multi-channel track
+    1 = one or more simultaneous tracks of a sequence
+    2 = one or more sequentially independent single-track patterns
+Number of Tracks (ntrks): 2 bytes which describe the number of tracks
+Division: 16 bits which specify the meaning of delta-times
+    | bit 15 | bits 14 - 8           | bits 7 - 0  |
+    |      0 | ticks per quarter-note              |
+    |      1 | negative SMPTE format | ticks/frame |
+
+Example header chunk:
+4D 54 68 64     type   : MThd
+00 00 00 06     length : 6 bytes
+00 01           format : 1, 1+ simultaneous tracks of a sequence
+00 02           ntracks: 2
+01 E0           division: ticks per quarter-note
+more on division -- binary = 0000000111100000
+                    bit 15 = 0, ticks/quarter-note = 120
+
+-----------------------------------------------------------
+
+Track Chunks define the actual MIDI events
+<Track Chunk> = <chunk type><length><MTrk event>+
+Chunk type (4 bytes) will be MTrk (Dec: 77 84 104 100, Hex: 4D 54 72 6B)
+Length (defined in 4 bytes) tells the length of the event
+<MTrk event> = <delta-time><event>
+Delta-Time is the amount of time before the event
+    Fraction of a beat or second, as specified in the header (ticks = usec = microsecond. 1000 micro = 1 milli)
+<event> = <MIDI event> | <sysex event> | <meta-event>
+MIDI event == MIDI channel message
+Sysex event is a MIDI system exclusive message (maybe not relevant?)
+Meta event is non-MIDI, but may be useful to format or sequencer (maybe not relevant?)
+
+Example track chunks:
+4D 54 72 6B     type     : MTrk
+00 00 00 0B     length   : 11 bytes
+00              delta    : 0 ticks
+FF 51 03        meta-evt : set tempo
+07 A1 20        ticks/qn : 500,000 usec / quarter note = 120 bpm
+                          (3-byte long binary number)
+00              delta    : 0 ticks
+FF 2F 00        meta-evt : end track
+
+-----------------------------------------------------------
+This is a MIDI chunk from my test file, I can't figure out some of it.
+4D 54 72 6B     type     : MTrk
+00 00 00 2C     length   : 44 bytes
+00              delta    : 0 ticks
+FF 03           meta-evt : track name
+      07        txt-len  : track name will be 7 bytes long
+    44 72 75 6D 6B 69 74 : Drumkit
+
+00 C9 00        something to do with channel select
+
+00              delta    : 0 ticks
+FF 58 04        meta-evt : set time signature
+         04     numerator: 4 beats per measure
+         02     pulse    : power of 2 which pulse is on (2^2 = 4, q-note pulse)
+            18  midi clocks per metronome click (through math, this is every quarter note)
+            08  midi clocks per 32nd note, 8 makes 24 per quarter note, which means duple-time.
+                        06 would mean triplet-time
+
+00              delta    : 0 ticks
+FF 59 02        meta-evt : key signature
+         00     accidentl: number of sharps or flats (-7 = 7 flats, +7 = 7 sharps)
+            00  quality  : 0 = major, 1 = minor
+
+00
+B9 65 00
+00
+B9 64 00
+00
+B9 06 06
+
+00              delta    : 0 ticks
+FF 2F 00        meta-evt : end track
+

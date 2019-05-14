@@ -39,7 +39,7 @@ namespace BreakdownGenerator
                     int b;
                     while ((b = fs.ReadByte()) != -1)
                     {
-                        Console.WriteLine(b);
+                        Console.Write(b + " ");
                     }
                 }
             }
